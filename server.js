@@ -47,5 +47,5 @@ function setCallback(ps, pe) {
 module.exports = {
     app: app,
     server: server,
-    setCallback, setCallback
+    setCallback: setCallback
 };
