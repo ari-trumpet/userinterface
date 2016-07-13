@@ -132,8 +132,9 @@ setInterval(function(){
     //myLcd.setColor(53, 39, 249);
     // RGB Red
     myLcd.setColor(255, 0, 0);
-    myLcd.write('Hello World');
-    myLcd.setCursor(1,2);
+    myLcd.write('Hello World  this');
+    myLcd.setCursor(1,0);
+    myLcd.rite('WAVE: Saw   Square   Sign');
 },300);
 
 
