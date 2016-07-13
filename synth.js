@@ -28,7 +28,7 @@ var sources_num = 5; /* max */
 var sources = [];
 var sources_used = [];
 var waves = ["sin", "squareOsc", "sawOsc"];
-var ratio = [1, 1, 1];
+var ratio = [0.3, 0.3, 0.3];
 //var waves = ["sin"];
 //var ratio = [1];
 
