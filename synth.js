@@ -22,7 +22,8 @@ var notes = {
     "e2":  440 * Math.pow(2,  7 / 12),
 };
 
-var pitch_diff = 0;
+var pitchDiff = 0;
+var octave = 0;
 
 var sources_num = 5; /* max */
 var sources = [];
@@ -66,12 +67,16 @@ function pressStart(key) {
     for (var i = 0; i < sources_num; i++) {
         if (sources_used[i] == null) {
             sources_used[i] = key;
-            s.set("osc" + i + ".freq", notes[key] * Math.pow(2, pitch_diff / 12));
+            setFreq(i, key);
             s.set("osc" + i + ".mul.gate", 1.0);
             console.log("start", key, "osc: ", i);
             break;
         }
     }
+}
+
+function setFreq(i, key) {
+    s.set("osc" + i + ".freq", notes[key] * Math.pow(2, octave + pitchDiff / 12));
 }
 
 function pressEnd(key) {
@@ -91,12 +96,29 @@ function pressEnd(key) {
 }
 
 function setPitchDiff(x) { /* -1 < x < 1 */
-    pitch_diff = x;
+    pitchDiff = x;
     for (var i = 0; i < sources_num; i++) {
         if (sources_used[i] == null) break;
         var key = sources_used[i];
 
-        s.set("osc" + i + ".freq", notes[key] * Math.pow(2, x / 12));
+        setFreq(i, key);
+    }
+}
+
+var waves = ["sinOsc", "squareOsc"];
+function setWave(n) {
+    for (var i = 0; i < sources_num; i++) {
+        if (sources_used[i] == null) break;
+        s.set("osc" + i + ".ugen", "flock.ugen." + waves[n]);
+    }
+}
+
+function setOctave(n) {
+    octave = n;
+    console.log(n);
+    for (var i = 0; i < sources_num; i++) {
+        if (sources_used[i] == null) break;
+        setFreq(i, sources_used[i]);
     }
 }
 
@@ -107,5 +129,6 @@ module.exports = {
     enviro: enviro,
     pressStart: pressStart,
     pressEnd: pressEnd,
-    setPitchDiff: setPitchDiff
+    setPitchDiff: setPitchDiff,
+    setOctave: setOctave
 };
