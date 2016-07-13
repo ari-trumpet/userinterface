@@ -27,11 +27,6 @@ var pitch_diff = 0;
 var sources_num = 5; /* max */
 var sources = [];
 var sources_used = [];
-var waves = ["sin", "squareOsc", "sawOsc"];
-var ratio = [0.3, 0.3, 0.3];
-//var waves = ["sin"];
-//var ratio = [1];
-
 var s = flock.synth({
     synthDef: {
         ugen: "flock.ugen.sum",
@@ -39,28 +34,21 @@ var s = flock.synth({
             for (var i = 0; i < sources_num; i++) {
                 sources_used[i] = null;
                 sources[i] = {
-                   ugen: "flock.ugen.sum",
-                   sources: waves.map(function (wave, j) {
-                       console.log("osc" + i + "-" + j);
-                       return {
-                           id: "osc" + i + "-" + j,
-                           ugen: "flock.ugen." + wave,
-                           freq: 880,
-                           mul: {
-                               ugen: "flock.ugen.envGen",
-                               envelope: {
-                                   type: "flock.envelope.adsr",
-                                   attack: 0,
-                                   decay: 1.0,
-                                   peak: 0.10,
-                                   sustain: 1.0,
-                                   release: 1.0,
-                               },
-                               gate: 0.0,
-                               mul: 1,
-                           }
-                       };
-                   }),
+                    id: "osc" + i,
+                    ugen: "flock.ugen.sin",
+                    freq: 880,
+                    mul: {
+                        ugen: "flock.ugen.envGen",
+                        envelope: {
+                            type: "flock.envelope.adsr",
+                            attack: 0,
+                            decay: 1.0,
+                            peak: 0.15,
+                            sustain: 1.0,
+                            release: 1.0,
+                        },
+                        gate: 0.0
+                    }
                 };
             }
             return sources;
@@ -78,11 +66,8 @@ function pressStart(key) {
     for (var i = 0; i < sources_num; i++) {
         if (sources_used[i] == null) {
             sources_used[i] = key;
-            for (var j = 0; j < waves.length; j++) {
-                s.set("osc" + i + "-" + j + ".mul.mul", ratio[j]);
-                s.set("osc" + i + "-" + j + ".freq", notes[key] * Math.pow(2, pitch_diff / 12));
-                s.set("osc" + i + "-" + j + ".mul.gate", 1.0);
-            }
+            s.set("osc" + i + ".freq", notes[key] * Math.pow(2, pitch_diff / 12));
+            s.set("osc" + i + ".mul.gate", 1.0);
             console.log("start", key, "osc: ", i);
             break;
         }
@@ -97,10 +82,8 @@ function pressEnd(key) {
 
     for (var i = 0; i < sources_num; i++) {
         if (sources_used[i] == key) {
+            s.set("osc" + i + ".mul.gate", 0.0);
             sources_used[i] = null;
-            for (var j = 0; j < waves.length; j++) {
-                s.set("osc" + i + "-" + j + ".mul.gate", 0.0);
-            }
             console.log("end", key, "osc: ", i);
             break;
         }
@@ -113,17 +96,7 @@ function setPitchDiff(x) { /* -1 < x < 1 */
         if (sources_used[i] == null) break;
         var key = sources_used[i];
 
-        for (var j = 0; j < waves.length; j++) {
-            s.set("osc" + i + "." + j + ".freq", notes[key] * Math.pow(2, x / 12));
-        }
-    }
-}
-
-function setRatio(j, r) {
-    ratio[j] = r;
-    for (var i = 0; i < sources_num; i++) {
-        if (sources_used[i] == null) break;
-        s.set("osc" + i + "-" + j + ".mul.mul", ratio[j]);
+        s.set("osc" + i + ".freq", notes[key] * Math.pow(2, x / 12));
     }
 }
 
@@ -134,6 +107,5 @@ module.exports = {
     enviro: enviro,
     pressStart: pressStart,
     pressEnd: pressEnd,
-    setPitchDiff: setPitchDiff,
-    setRatio: setRatio
+    setPitchDiff: setPitchDiff
 };
