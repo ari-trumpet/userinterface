@@ -22,6 +22,8 @@ var notes = {
     "e2":  440 * Math.pow(2,  7 / 12),
 };
 
+var pitch_diff = 0;
+
 var sources_num = 5; /* max */
 var sources = [];
 var sources_used = [];
@@ -54,11 +56,58 @@ var s = flock.synth({
     }
 });
 
+
+function pressStart(key) {
+    if (! (key in notes)) {
+        console.log("invalid key", key);
+        return;
+    }
+
+    for (var i = 0; i < sources_num; i++) {
+        if (sources_used[i] == null) {
+            sources_used[i] = key;
+            s.set("osc" + i + ".freq", notes[key] * Math.pow(2, pitch_diff / 12));
+            s.set("osc" + i + ".mul.gate", 1.0);
+            console.log("start", key, "osc: ", i);
+            break;
+        }
+    }
+}
+
+function pressEnd(key) {
+    if (! (key in notes)) {
+        console.log("invalid key", key);
+        return;
+    }
+
+    for (var i = 0; i < sources_num; i++) {
+        if (sources_used[i] == key) {
+            s.set("osc" + i + ".mul.gate", 0.0);
+            sources_used[i] = null;
+            console.log("end", key, "osc: ", i);
+            break;
+        }
+    }
+}
+
+function setPitchDiff(x) { /* -1 < x < 1 */
+    pitch_diff = x;
+    for (var i = 0; i < sources_num; i++) {
+        if (sources_used[i] == null) break;
+        var key = sources_used[i];
+
+        s.set("osc" + i + ".freq", notes[key] * Math.pow(2, x / 12));
+    }
+}
+
+setTimeout(function () { setPitch(0.1); }, 1000);
+
 enviro.play();
 
 module.exports = {
     s: s,
     enviro: enviro,
-    sources_used: sources_used,
-    notes: notes
+    pressStart: pressStart,
+    pressEnd: pressEnd,
+    setPitchDiff: setPitchDiff
 };
