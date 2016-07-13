@@ -131,10 +131,18 @@ setInterval(function(){
     // RGB Blue
     //myLcd.setColor(53, 39, 249);
     // RGB Red
+    var p0 = myRotaryEncoder0.position();
+    var p1 = myRotaryEncoder1.position();
+    var p2 = myRotaryEncoder2.position();
     myLcd.setColor(255, 0, 0);
-    myLcd.write('Hello World  this');
-    myLcd.setCursor(1,0);
-    myLcd.rite('WAVE: Saw   Square   Sign');
+    myLcd.write('WAVE: Saw   Square   Sign');
+    myLcd.setCursor(9,7);
+    myLcd.write(p1);
+    myLcd.write(9,10);
+    myLcd.write(p2);
+    myLcd.write(9,22);
+    myLcd.write(p3);
+    
 },300);
 
 
