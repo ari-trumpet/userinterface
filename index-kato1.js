@@ -11,7 +11,7 @@ server.setCallback(synth.pressStart, synth.pressEnd);
 //setup/Initialization for upm
 var upm_groveSensor = require('jsupm_grove');
 var mraa = require('mraa');
-console.log('MRAA Version: ' + mraa.getVersion());
+//console.log('MRAA Version: ' + mraa.getVersion());
 
 /* Button */
 // Create the button object using GPIO pin 0
@@ -25,10 +25,10 @@ var button3 = new upm_groveSensor.GroveButton(7);
 buttonloop();
 
 function buttonloop(){
-    console.log(button0.name() + "0 value is " + button0.value());
-    console.log(button1.name() + "1 value is " + button1.value());
-    console.log(button2.name() + "2 value is " + button2.value());
-    console.log(button3.name() + "3 value is " + button3.value());
+    //console.log(button0.name() + "0 value is " + button0.value());
+    //console.log(button1.name() + "1 value is " + button1.value());
+    //console.log(button2.name() + "2 value is " + button2.value());
+    //console.log(button3.name() + "3 value is " + button3.value());
 
     setTimeout(buttonloop, 300);
 }
@@ -37,7 +37,7 @@ function buttonloop(){
  var analogPin4 = new m.Dio(4);
  var analogValue = analagPin4.read();
  function readButtonValue4() {
-     console.log('button sensor4 value is ' + analogValue);
+     //console.log('button sensor4 value is ' + analogValue);
  }
  */
 //var button3 = new groveSensor
@@ -59,10 +59,10 @@ function loop()
     var reldeg = groveRotary.rel_deg();
     var relrad = groveRotary.rel_rad();
 
-    //write the knob value to the console in different formats
+    //write the knob value to the //console in different formats
 
-    console.log("Volume: " + abs);
-    //console.log("Rel: " + rel + " " + Math.round(parseInt(reldeg)) + " " + relrad.toFixed(3));
+    //console.log("Volume: " + abs);
+    ////console.log("Rel: " + rel + " " + Math.round(parseInt(reldeg)) + " " + relrad.toFixed(3));
 
     //wait 2 s and call function again
 
@@ -78,15 +78,15 @@ var myRotaryEncoder2 = new rotaryEncoder.RotaryEncoder(6,7);
 var myRotaryEncoder3 = new rotaryEncoder.RotaryEncoder(8,9);
 
 var myInterval = setInterval(function(){
-    console.log("Encoder0: " + myRotaryEncoder0.position());
-    console.log("Encoder1: " + myRotaryEncoder1.position());
-    console.log("Encoder2: " + myRotaryEncoder2.position());
-    console.log("Encoder3: " + myRotaryEncoder3.position());
+    //console.log("Encoder0: " + myRotaryEncoder0.position());
+    //console.log("Encoder1: " + myRotaryEncoder1.position());
+    //console.log("Encoder2: " + myRotaryEncoder2.position());
+    //console.log("Encoder3: " + myRotaryEncoder3.position());
 }, 300);
 // When exiting: clear interval and print message
 process.on('SIGNT', function(){
     clearInterval(myInterval);
-    console.log("Exiting...");
+    //console.log("Exiting...");
     process.exit(0);
 });
 
@@ -102,6 +102,7 @@ setInterval(function()
 {
     var x = roundNum(myJoystick.getXInput(), 6);
 
+    console.log(x);
     if (joystick_x != x) {
         joystick_x = x;
         synth.setPitchDiff(Math.max(-1, Math.min(x / 0.17, 1)));
@@ -109,7 +110,7 @@ setInterval(function()
 
     var XString = "Driving X:" + x;
     var YString = ": and Y:" + roundNum(myJoystick.getYInput(), 6);
-    console.log(XString + YString);
+    //console.log(XString + YString);
 }, 300);
 
 function roundNum(num, decimalPlaces)
@@ -123,7 +124,7 @@ function roundNum(num, decimalPlaces)
 // Print message when exiting
 process.on('SIGINT', function()
 {
-    console.log("Exiting...");
+    //console.log("Exiting...");
     process.exit(0);
 });
 

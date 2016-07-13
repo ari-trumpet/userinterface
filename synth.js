@@ -100,8 +100,6 @@ function setPitchDiff(x) { /* -1 < x < 1 */
     }
 }
 
-setTimeout(function () { setPitch(0.1); }, 1000);
-
 enviro.play();
 
 module.exports = {

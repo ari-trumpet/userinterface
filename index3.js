@@ -8,7 +8,7 @@ var enviro = synth.enviro;
 var sources_used = synth.sources_used;
 var notes = synth.notes;
 
-server.setCallback(pressStart, pressEnd);
+server.setCallback(synth.pressStart, synth.pressEnd);
 
 //setup/Initialization for upm
 var upm_groveSensor = require('jsupm_grove');
@@ -20,18 +20,17 @@ console.log('MRAA Version: ' + mraa.getVersion());
 var button0 = new upm_groveSensor.GroveButton(0);
 var button1 = new upm_groveSensor.GroveButton(3);
 var button2 = new upm_groveSensor.GroveButton(5);
-var button3 = new upm_groveSensor.GroveButton(7);
-//var button3 = new upm_groveSensor.GroveButton(3);
+var button3 = new upm_groveSensor.GroveButton(7); //var button3 = new upm_groveSensor.GroveButton(3);
 // Read the input and print, waiting one second between readings
 
 buttonloop();
 
 function buttonloop(){
-    console.log(button0.name() + "0 value is " + button0.value());
+   /* console.log(button0.name() + "0 value is " + button0.value());
     console.log(button1.name() + "1 value is " + button1.value());
     console.log(button2.name() + "2 value is " + button2.value());
     console.log(button3.name() + "3 value is " + button3.value());
-
+*/
     setTimeout(buttonloop, 300);
 }
 
@@ -63,7 +62,7 @@ function loop()
 
     //write the knob value to the console in different formats
 
-    console.log("Volume: " + abs);
+   // console.log("Volume: " + abs);
     //console.log("Rel: " + rel + " " + Math.round(parseInt(reldeg)) + " " + relrad.toFixed(3));
 
     //wait 2 s and call function again
@@ -80,11 +79,11 @@ var myRotaryEncoder2 = new rotaryEncoder.RotaryEncoder(6,7);
 var myRotaryEncoder3 = new rotaryEncoder.RotaryEncoder(8,9);
 
 var myInterval = setInterval(function(){
-    console.log("Encoder0: " + myRotaryEncoder0.position());
+   /* console.log("Encoder0: " + myRotaryEncoder0.position());
     console.log("Encoder1: " + myRotaryEncoder1.position());
     console.log("Encoder2: " + myRotaryEncoder2.position());
     console.log("Encoder3: " + myRotaryEncoder3.position());
-}, 300);
+*/}, 300);
 // When exiting: clear interval and print message
 process.on('SIGNT', function(){
     clearInterval(myInterval);
@@ -98,11 +97,21 @@ var joystick = require('jsupm_joystick12');
 var myJoystick = new joystick.Joystick12(2, 3);
 
 // Print the X and Y input values every second
+var joystick_x = null;
 setInterval(function()
 {
-    var XString = "Driving X:" + roundNum(myJoystick.getXInput(), 6);
+	/*
+    var x = roundNum(myJoystick.getXInput(), 6);
+
+    if (joystick_x != x) {
+        joystick_x = x;
+        //synth.setPitchDiff(Math.max(-1, Math.min(x / 0.17, 1)));
+    }
+
+    var XString = "Driving X:" + x;
     var YString = ": and Y:" + roundNum(myJoystick.getYInput(), 6);
-    console.log(XString + YString);
+    */
+   // console.log(XString + YString);
 }, 300);
 function roundNum(num, decimalPlaces)
 {
@@ -131,50 +140,16 @@ setInterval(function(){
     // RGB Blue
     //myLcd.setColor(53, 39, 249);
     // RGB Red
-    var p0 = myRotaryEncoder0.position();
-    var p1 = myRotaryEncoder1.position();
-    var p2 = myRotaryEncoder2.position();
+   // var p0 = myRotaryEncoder0.position();
+   // var p1 = myRotaryEncoder1.position();
+   // var p2 = myRotaryEncoder2.position();
     myLcd.setColor(255, 0, 0);
-    myLcd.write('WAVE: Saw   Square   Sign');
-    myLcd.setCursor(9,7);
+    myLcd.write('WAVE: Saw');
+   /* myLcd.setCursor(9,7);
     myLcd.write(p1);
     myLcd.write(9,10);
     myLcd.write(p2);
     myLcd.write(9,22);
     myLcd.write(p3);
-    
+    */
 },300);
-
-
-function pressStart(key) {
-    if (! (key in notes)) {
-        console.log("invalid key", key);
-        return;
-    }
-
-    for (var i = 0; i < sources_num; i++) {
-        if (sources_used[i] == null) {
-            sources_used[i] = key;
-            s.set("osc" + i + ".freq", notes[key]);
-            s.set("osc" + i + ".mul.gate", 1.0);
-            console.log("start", key, "osc: ", i);
-            break;
-        }
-    }
-}
-
-function pressEnd(key) {
-    if (! (key in notes)) {
-        console.log("invalid key", key);
-        return;
-    }
-
-    for (var i = 0; i < sources_num; i++) {
-        if (sources_used[i] == key) {
-            s.set("osc" + i + ".mul.gate", 0.0);
-            sources_used[i] = null;
-            console.log("end", key, "osc: ", i);
-            break;
-        }
-    }
-}
