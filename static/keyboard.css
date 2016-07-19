@@ -1,0 +1,65 @@
+body {
+	background-color: #333;
+}
+#wrapper {
+	position: absolute;
+	left: 50%; top: 50%;
+	margin-top: -150px;
+	margin-left: -400px;
+	width: 800px;
+	height: 300px;
+	background-color: #ddd;
+}
+
+.white {
+	position: absolute;
+	margin: 0 auto;
+	margin-left: 1px;
+	top: 148px;
+	left: 50%;
+	margin-left: -306px; /* ((60 + 1) * 10 + 1) / 2 = */
+}
+
+.black {
+	position: absolute;
+	margin: 0 auto;
+	margin-left: 1px;
+	top: 50px;
+	left: 50%;
+	margin-left: -275px; /* ((60 + 1) * 9 + 1) / 2 = */
+}
+
+.key {
+	float: left;
+	text-align: center;
+	position: relative;
+}
+
+.key span {
+	display: block;
+	width: 100%;
+	position: absolute;
+	bottom: 10px;
+}
+
+.white .key {
+	background-color: white;
+	width: 60px; height: 150px;
+	border: 1px solid #ccc;
+	margin-left: -1px;
+	color: #333;
+}
+
+.black .key {
+	background-color: black;
+	width: 50px; height: 150px;
+	border: 1px solid #333;
+	margin-left: 4px;
+	margin-right: 5px;
+	color: #ccc;
+}
+
+.key.hid {
+	visibility: hidden;
+}
+

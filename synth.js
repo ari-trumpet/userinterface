@@ -25,7 +25,7 @@ var notes = {
 var pitchDiff = 0;
 var octave = 0;
 
-var sources_num = 5; /* max */
+var sources_num = 3; /* max */
 var sources = [];
 var sources_used = [];
 var s = flock.synth({
@@ -44,7 +44,7 @@ var s = flock.synth({
                             type: "flock.envelope.adsr",
                             attack: 0,
                             decay: 1.0,
-                            peak: 0.15,
+                            peak: 0.10,
                             sustain: 1.0,
                             release: 1.0,
                         },
@@ -115,7 +115,7 @@ function setWave(n) {
 
 function setOctave(n) {
     octave = n;
-    console.log(n);
+    //console.log(n);
     for (var i = 0; i < sources_num; i++) {
         if (sources_used[i] == null) break;
         setFreq(i, sources_used[i]);

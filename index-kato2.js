@@ -23,10 +23,10 @@ var groveRotary = new upm_groveSensor.GroveRotary(0);
 */
 
 /* RotaryEncoder */
-//var rotaryEncoder = require("jsupm_rotaryencoder");
+var rotaryEncoder = require("jsupm_rotaryencoder");
 // Instantiate a Grove Rotary Encoder, using signal pins D2 and D3
-/*var myRotaryEncoder0 = new rotaryEncoder.RotaryEncoder(2,3);
-var myRotaryEncoder1 = new rotaryEncoder.RotaryEncoder(4,5);
+var myRotaryEncoder0 = new rotaryEncoder.RotaryEncoder(2,3);
+/*var myRotaryEncoder1 = new rotaryEncoder.RotaryEncoder(4,5);
 var myRotaryEncoder2 = new rotaryEncoder.RotaryEncoder(6,7);
 var myRotaryEncoder3 = new rotaryEncoder.RotaryEncoder(8,9);
 */
@@ -41,13 +41,27 @@ var joystick_x = null;
 var LCD = require('jsupm_i2clcd');
 
 // Initialize Jhd1313m1 at 0x62 (RGB_ADDRESS) and 0x3E (LCD_ADDRESS)
-//var myLcd = new LCD.Jhd1313m1(0, 0x3E, 0x62);
+var myLcd = new LCD.Jhd1313m1(0, 0x3E, 0x62);
 
 setInterval(function(){
-//    myLcd.setCursor(0,0);
+    
+var para = myRotaryEncoder0.position();
+    //console.log("E0 : "+para);
+    myLcd.setCursor(0,1);
+    if(para > 5){
+    myLcd.write("Octave : 5");
+    para = 5;
+    myRotaryEncoder0.initPosition(5);    
+    }else if(para <0){
+    myRotaryEncoder0.initPosition(0);    
+    para = 0;	    
+    }else{	    
+    synth.setOctave(Math.abs(para));
+    myLcd.write("Octave : "+Math.abs(para));
+    }
     // RGB Blue
     //myLcd.setColor(53, 39, 249);
-    // RGB Red
+    // RGB Red.(
 /*    myLcd.setColor(255, 0, 0);
     myLcd.write('Hello World');
     myLcd.setCursor(1,2);
@@ -76,7 +90,7 @@ setInterval(function(){
     var XString = "Driving X:" + x;
     var YString = ": and Y:" + roundNum(myJoystick.getYInput(), 6);
     //console.log(XString + YString);
-    console.log("x", xx, "y", myJoystick.getYInput());
+  //  console.log("x", xx, "y", myJoystick.getYInput());
 
 //    myLcd.setCursor(0,0);
     // RGB Blue
@@ -84,7 +98,7 @@ setInterval(function(){
     // RGB Red
 //    myLcd.setColor(255, 0, 0);
 //    myLcd.write('WAVE: Saw   Square   Sign');
-},300);
+},100);
 
 // When exiting: clear interval and print message
 process.on('SIGNT', function(){
